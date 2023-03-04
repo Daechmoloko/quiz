@@ -13,8 +13,8 @@ class QuestionData
   private
 
   def load_from(filename)
-    YAML.safe_load_file(filename, symbolize_names: true).shuffle.map do |q_data|
-      Question.new(q_data[:question], q_data[:answers])
+    YAML.safe_load_file(filename, symbolize_names: true).last[:question].shuffle.map do |q_data|
+      Question.new(q_data[:title], q_data[:answers])
     end
   end
 end
