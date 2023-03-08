@@ -17,16 +17,16 @@ class Run
     FileWriter.new
   end
 
-  def get_raw_question_data(name_quiz)
-    QuestionData.new name_quiz
+  def get_raw_question_data
+    QuestionData.new
   end
 
   def entry_report_statistik
     Statistiks.new
   end
 
-  def question_answers(question_data, statistiks)
-    question_data.collection.each do |next_question|
+  def question_answers(question_data, statistiks, name_quiz)
+    question_data.collection(name_quiz).each do |next_question|
       puts next_question
       next_question.display_answers
       user_answer = next_question.find_answer_by(ask_for_answer_char)
@@ -63,9 +63,9 @@ class Run
     writer.write('a', "\n\n*** Имя пользователя #{name} ***\n", name, current_time)
     writer.write('a', "\n\n*** Названия квиза #{name_quiz} ***\n", name, current_time)
     writer.write('a', "\n\n*** Время создания #{current_time} ***\n\n", name, current_time)
-    question_data = get_raw_question_data(name_quiz)
+    question_data = get_raw_question_data
     statistiks = entry_report_statistik
-    question_answers(question_data, statistiks)
+    question_answers(question_data, statistiks, name_quiz)
     statistiks.print_report(name, current_time, writer)
   end
 end
