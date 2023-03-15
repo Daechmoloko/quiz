@@ -22,11 +22,11 @@ module App
           '             # Prints name quiz'
         ]
 
-        def call(name_quiz: 'first_quiz', filename: 'question.yml', **)
+        def call(name_quiz:, filename: 'question.yml', **)
           contract = QuizContract.new.call(YAML.safe_load_file(filename, symbolize_names: true))
           if contract.success?
             puts 'Contract valid'
-            Run.new.call(name_quiz, contract[:config])
+            Run.new.call(name_quiz, contract[:config].freeze)
           else
             puts 'Contract not valid'
           end
