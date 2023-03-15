@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class QuestionData
-  require 'yaml'
   require_relative 'question'
 
   def call(quiz_contract, name_quiz)

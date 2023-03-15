@@ -4,8 +4,8 @@
 require 'bundler/setup'
 require 'yaml'
 require 'dry/cli'
-require_relative 'run'
 require 'dry/validation'
+require_relative 'run'
 require_relative 'quiz_contract'
 
 module App

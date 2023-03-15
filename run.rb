@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'time'
-require 'yaml'
 require_relative 'question_data'
 require_relative 'file_writer'
 require_relative 'statistiks'
