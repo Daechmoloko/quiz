@@ -71,7 +71,7 @@ class Run
     end
   end
 
-  def call(name_quiz, quiz_contract, **)
+  def call(name_quiz, quiz_contract)
     name = name_user
     current_time = transit_time
     writer = create_report_file
