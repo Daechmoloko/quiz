@@ -8,7 +8,6 @@ require_relative 'run'
 require 'dry/validation'
 require_relative 'quiz_contract'
 
-
 module App
   module CLI
     module Commands
@@ -23,13 +22,13 @@ module App
           '             # Prints name quiz'
         ]
 
-        def call(name_quiz: 'first_quiz', filename: "question.yml", **)
-          config = QuizContract.new().call(YAML.safe_load_file(filename, symbolize_names: true))
-          if config.success?
-            puts "Contract valid"
-            Run.new.call(name_quiz)
+        def call(name_quiz: 'first_quiz', filename: 'question.yml', **)
+          contract = QuizContract.new.call(YAML.safe_load_file(filename, symbolize_names: true))
+          if contract.success?
+            puts 'Contract valid'
+            Run.new.call(name_quiz, contract[:config])
           else
-            puts "Contract not valid"
+            puts 'Contract not valid'
           end
         end
       end

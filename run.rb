@@ -6,7 +6,6 @@ require_relative 'question_data'
 require_relative 'file_writer'
 require_relative 'statistiks'
 class Run
-
   def name_user
     puts 'Введите Ваше имя'
     $stdin.gets.strip
@@ -28,8 +27,8 @@ class Run
     Statistiks.new
   end
 
-  def question_answers(question_data, statistiks, name_quiz, result)
-    question_data.call(name_quiz).each do |next_question|
+  def question_answers(question_data, statistiks, name_quiz, quiz_contract, result)
+    question_data.call(quiz_contract, name_quiz).each do |next_question|
       display_question(next_question.first[:body])
       display_answers(next_question.first[:answers])
       user_answer = next_question.first[:answers][ask_for_answer_char]
@@ -73,7 +72,7 @@ class Run
     end
   end
 
-  def call (name_quiz, **)
+  def call(name_quiz, quiz_contract, **)
     name = name_user
     current_time = transit_time
     writer = create_report_file
@@ -83,7 +82,7 @@ class Run
     question_data = raw_question_data
     statistiks = entry_report_statistik
     result = []
-    question_answers(question_data, statistiks, name_quiz, result)
+    question_answers(question_data, statistiks, name_quiz, quiz_contract, result)
     statistiks.call(name, current_time, writer, result)
   end
 end
