@@ -64,6 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   dry-cli
+  dry-schema
   dry-validation
   rubocop
 

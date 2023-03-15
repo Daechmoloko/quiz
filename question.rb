@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Question
   FIRST_ANSWER_CODE = 'A'.ord
 

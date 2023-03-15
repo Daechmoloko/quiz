@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
 require 'time'
+require 'yaml'
 require_relative 'question_data'
 require_relative 'file_writer'
 require_relative 'statistiks'
-
 class Run
-  def get_name
+
+  def name_user
     puts 'Введите Ваше имя'
-    STDIN.gets.strip
+    $stdin.gets.strip
   end
 
-  def get_current_time
+  def transit_time
     Time.now.strftime('%Y-%m-%d_%H:%M:%S')
   end
 
@@ -17,7 +20,7 @@ class Run
     FileWriter.new
   end
 
-  def get_raw_question_data
+  def raw_question_data
     QuestionData.new
   end
 
@@ -31,7 +34,6 @@ class Run
       display_answers(next_question.first[:answers])
       user_answer = next_question.first[:answers][ask_for_answer_char]
       check?(user_answer, next_question.first[:corrent_answer], statistiks, result)
-      result
     end
   end
 
@@ -48,12 +50,12 @@ class Run
   def ask_for_answer_char
     loop do
       puts 'Ваш ответ: '
-      user_answer_char = STDIN.gets.strip
+      user_answer_char = $stdin.gets.strip
       if user_answer_char.empty?
         puts 'Ответ не должен быть пустым!'
         next
-      elsif !user_answer_char.upcase[0].between?('A', 'D')
-        return user_answer_char
+      elsif user_answer_char.upcase[0].between?('A', 'D')
+        return user_answer_char.upcase
       else
         puts 'Ответ должен быть от А до D'
       end
@@ -64,23 +66,21 @@ class Run
     if user_answer == corrent_answer
       puts 'Верно!'
       statistiks.counter_answers(result, 1)
-      result
     else
       puts 'Неверно!'
       puts "Верный ответ #{corrent_answer}"
       statistiks.counter_answers(result, 0)
-      result
     end
   end
 
-  def call(name_quiz, **)
-    name = get_name
-    current_time = get_current_time
+  def call (name_quiz, **)
+    name = name_user
+    current_time = transit_time
     writer = create_report_file
     writer.call('a', "\n\n*** Имя пользователя #{name} ***\n", name, current_time)
     writer.call('a', "\n\n*** Названия квиза #{name_quiz} ***\n", name, current_time)
     writer.call('a', "\n\n*** Время создания #{current_time} ***\n\n", name, current_time)
-    question_data = get_raw_question_data
+    question_data = raw_question_data
     statistiks = entry_report_statistik
     result = []
     question_answers(question_data, statistiks, name_quiz, result)

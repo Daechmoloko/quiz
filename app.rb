@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'bundler/setup'
+require 'yaml'
 require 'dry/cli'
 require_relative 'run'
+require 'dry/validation'
+require_relative 'quiz_contract'
+
 
 module App
   module CLI
@@ -17,8 +23,14 @@ module App
           '             # Prints name quiz'
         ]
 
-        def call(name_quiz: 'first_quiz', **)
-          Run.new.call(name_quiz)
+        def call(name_quiz: 'first_quiz', filename: "question.yml", **)
+          config = QuizContract.new().call(YAML.safe_load_file(filename, symbolize_names: true))
+          if config.success?
+            puts "Contract valid"
+            Run.new.call(name_quiz)
+          else
+            puts "Contract not valid"
+          end
         end
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QuestionData
   require 'yaml'
   require_relative 'question'
@@ -7,7 +9,7 @@ class QuestionData
   end
 
   def load_from(filename, name_quiz)
-    YAML.safe_load_file(filename, symbolize_names: true).select { |arg| arg[:name] == name_quiz }
+    YAML.safe_load_file(filename, symbolize_names: true)[:config].select { |arg| arg[:name] == name_quiz }
         .last[:question].shuffle.map do |q_data|
       Question.new.call(q_data[:title], q_data[:answers])
     end
