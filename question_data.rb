@@ -9,7 +9,7 @@ class QuestionData
 
   def load_from(quiz_contract, name_quiz)
     quiz_contract.select { |arg| arg[:name] == name_quiz }
-        .last[:question].shuffle.map do |q_data|
+                 .last[:question].shuffle.map do |q_data|
       Question.new.call(q_data[:title], q_data[:answers])
     end
   end

@@ -1,4 +1,6 @@
-class QuestionWithAnswers 
+# frozen_string_literal: true
+
+class QuestionWithAnswers
   def call(question_data, statistiks, name_quiz, quiz_contract, result)
     question_data.call(quiz_contract, name_quiz).each do |next_question|
       display_question(next_question.first[:body])

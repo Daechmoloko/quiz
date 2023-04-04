@@ -6,7 +6,6 @@ require_relative 'statistiks'
 require_relative 'questions_with_answers'
 require_relative 'data/repo/result_repo'
 
-
 class Run
   def name_user
     puts 'Введите Ваше имя'

@@ -15,7 +15,6 @@ module App
       extend Dry::CLI::Registry
 
       class RunQuiz < Dry::CLI::Command
-
         desc 'Print name quiz'
 
         argument :name_quiz, desc: 'Название квиза'
@@ -23,14 +22,15 @@ module App
         example [
           '             # Prints name quiz'
         ]
-        def connected_db 
-          rom = ROM.container(:sql, 'sqlite://data/database_result.DB') do |conf|
+        def connected_db
+          ROM.container(:sql, 'sqlite://data/database_result.DB') do |conf|
             conf.relation(:results) do
-              schema(infer:true)
+              schema(infer: true)
               auto_struct true
             end
           end
         end
+
         def call(name_quiz:, filename: 'question.yml', **)
           contract = QuizContract.new.call(YAML.safe_load_file(filename, symbolize_names: true))
           if contract.success?
