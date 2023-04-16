@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class QuestionWithAnswers
-  def call(question_data, statistiks, name_quiz, quiz_contract, result)
-    question_data.call(quiz_contract, name_quiz).each do |next_question|
+  def call(question_data, statistiks, result, rom, quiz_contract)
+    question_data.call(rom, quiz_contract).each do |next_question|
       display_question(next_question.first[:body])
       display_answers(next_question.first[:answers])
       user_answer = next_question.first[:answers][ask_for_answer_char]

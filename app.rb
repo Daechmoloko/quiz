@@ -6,6 +6,7 @@ require 'yaml'
 require 'dry/cli'
 require 'dry/validation'
 require 'rom'
+require 'pry'
 require_relative 'run'
 require_relative 'quiz_contract'
 
@@ -28,15 +29,36 @@ module App
               schema(infer: true)
               auto_struct true
             end
+            conf.relation(:answers) do
+              schema(infer: true)
+              auto_struct true
+            end
+            conf.relation(:questions) do
+              schema(infer: true)
+              auto_struct true
+            end
+            conf.relation(:quizzes) do
+              schema(infer: true)
+              auto_struct true
+            end
           end
         end
 
-        def call(name_quiz:, filename: 'question.yml', **)
-          contract = QuizContract.new.call(YAML.safe_load_file(filename, symbolize_names: true))
-          if contract.success?
+        def instantiated_quiz_repo(rom)
+          QuizRepo.new(rom)
+        end
+
+        def load_quiz_from_db(rom, name_quiz)
+          quiz = instantiated_quiz_repo(rom).by_id_quiz(name: name_quiz)
+          QuizNameContract.new.call(quiz)
+        end
+
+        def call(name_quiz:, **)
+          rom = connected_db
+          contract_quiz = load_quiz_from_db(rom, name_quiz)
+          if contract_quiz.success?
             puts 'Contract valid'
-            rom = connected_db
-            Run.new.call(name_quiz, contract[:config].freeze, rom)
+            Run.new.call(contract_quiz[:name].freeze, contract_quiz[:id].freeze, rom)
           else
             puts 'Contract not valid'
           end

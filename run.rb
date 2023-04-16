@@ -28,18 +28,18 @@ class Run
     QuestionWithAnswers.new
   end
 
-  def instantiated_repo(rom)
+  def instantiated_result_repo(rom)
     ResultRepo.new(rom)
   end
 
-  def call(name_quiz, quiz_contract, rom)
+  def call(_name_quiz, quiz_contract, rom)
     name = name_user
     current_time = transit_time
     result = []
     question_data = raw_question_data
     statistiks = entry_report_statistik
-    input_question_and_answers.call(question_data, statistiks, name_quiz, quiz_contract, result)
+    input_question_and_answers.call(question_data, statistiks, result, rom, quiz_contract)
     corrent_answer_percentage = statistiks.call(name, current_time, result)
-    instantiated_repo(rom).create(name: name, time: current_time, result: corrent_answer_percentage)
+    instantiated_result_repo(rom).create(id_quiz: 1, name: name, time: current_time, result: corrent_answer_percentage)
   end
 end
