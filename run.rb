@@ -32,7 +32,7 @@ class Run
     ResultRepo.new(rom)
   end
 
-  def call(_name_quiz, quiz_contract, rom)
+  def call(name_quiz, quiz_contract, rom)
     name = name_user
     current_time = transit_time
     result = []
@@ -40,6 +40,6 @@ class Run
     statistiks = entry_report_statistik
     input_question_and_answers.call(question_data, statistiks, result, rom, quiz_contract)
     corrent_answer_percentage = statistiks.call(name, current_time, result)
-    instantiated_result_repo(rom).create(id_quiz: 1, name: name, time: current_time, result: corrent_answer_percentage)
+    instantiated_result_repo(rom).create(id_quiz: quiz_contract, name: name, time: current_time, result: corrent_answer_percentage)
   end
 end
