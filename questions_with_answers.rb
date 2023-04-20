@@ -35,14 +35,14 @@ class QuestionWithAnswers
     end
   end
 
-  def check?(user_answer, corrent_answer, statistiks, result)
+  def check?(user_answer, corrent_answer, _statistiks, result)
     if user_answer == corrent_answer
       puts 'Верно!'
-      statistiks.counter_answers(result, 1)
+      result << 1
     else
       puts 'Неверно!'
       puts "Верный ответ #{corrent_answer}"
-      statistiks.counter_answers(result, 0)
+      result << 0
     end
   end
 end

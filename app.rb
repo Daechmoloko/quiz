@@ -8,7 +8,7 @@ require 'dry/validation'
 require 'rom'
 require 'pry'
 require_relative 'run'
-require_relative 'quiz_contract'
+require_relative 'data/repos/quiz_repo'
 
 module App
   module CLI
@@ -16,6 +16,7 @@ module App
       extend Dry::CLI::Registry
 
       class RunQuiz < Dry::CLI::Command
+        include Repos
         desc 'Print name quiz'
 
         argument :name_quiz, desc: 'Название квиза'
@@ -49,19 +50,14 @@ module App
         end
 
         def load_quiz_from_db(rom, name_quiz)
-          quiz = instantiated_quiz_repo(rom).by_id_quiz(name: name_quiz)
-          QuizNameContract.new.call(quiz)
+          instantiated_quiz_repo(rom).by_id_quiz(name: name_quiz)
         end
 
         def call(name_quiz:, **)
           rom = connected_db
           contract_quiz = load_quiz_from_db(rom, name_quiz)
-          if contract_quiz.success?
-            puts 'Contract valid'
-            Run.new.call(contract_quiz[:name].freeze, contract_quiz[:id].freeze, rom)
-          else
-            puts 'Contract not valid'
-          end
+          # binding.pry
+          Run.new.call(contract_quiz.first.name, contract_quiz.first.id, rom)
         end
       end
 
