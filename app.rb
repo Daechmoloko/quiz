@@ -7,6 +7,7 @@ require 'dry/cli'
 require 'dry/validation'
 require 'rom'
 require 'pry'
+require 'import'
 require_relative 'run'
 require_relative 'data/repos/quiz_repo'
 
@@ -16,7 +17,7 @@ module App
       extend Dry::CLI::Registry
 
       class RunQuiz < Dry::CLI::Command
-        include Repos
+        include Import ['applicationdb.connected_db']
         desc 'Print name quiz'
 
         argument :name_quiz, desc: 'Название квиза'
@@ -54,9 +55,9 @@ module App
         end
 
         def call(name_quiz:, **)
-          rom = connected_db
+          # rom = connected_db
+          binding.pry
           contract_quiz = load_quiz_from_db(rom, name_quiz)
-          # binding.pry
           Run.new.call(contract_quiz.first.name, contract_quiz.first.id, rom)
         end
       end
