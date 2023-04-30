@@ -4,9 +4,12 @@ require 'dry/validation'
 require 'rom'
 require 'pry'
 require_relative 'question'
-require_relative 'data/repo/result_repo'
+# require_relative 'data/repos/answer_repo'
+# require_relative 'data/repos/question_repo'
 
 class QuestionData
+  # include Repos
+
   def call(rom, id_quiz)
     load_from(rom, id_quiz)
   end
