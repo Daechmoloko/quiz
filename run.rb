@@ -4,10 +4,10 @@ require 'time'
 require_relative 'question_data'
 require_relative 'statistiks'
 require_relative 'questions_with_answers'
-require_relative 'data/repos/result_repo'
+# require_relative 'data/repos/result_repo'
 
 class Run
-  include Repos
+  # include Repos
 
   def name_user
     puts 'Введите Ваше имя'

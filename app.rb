@@ -7,9 +7,8 @@ require 'dry/cli'
 require 'dry/validation'
 require 'rom'
 require 'pry'
-require 'import'
+require_relative 'system/boot'
 require_relative 'run'
-require_relative 'data/repos/quiz_repo'
 
 module App
   module CLI
@@ -17,7 +16,7 @@ module App
       extend Dry::CLI::Registry
 
       class RunQuiz < Dry::CLI::Command
-        include Import ['applicationdb.connected_db']
+        
         desc 'Print name quiz'
 
         argument :name_quiz, desc: 'Название квиза'
@@ -25,26 +24,6 @@ module App
         example [
           '             # Prints name quiz'
         ]
-        def connected_db
-          ROM.container(:sql, 'sqlite://data/database_result.DB') do |conf|
-            conf.relation(:results) do
-              schema(infer: true)
-              auto_struct true
-            end
-            conf.relation(:answers) do
-              schema(infer: true)
-              auto_struct true
-            end
-            conf.relation(:questions) do
-              schema(infer: true)
-              auto_struct true
-            end
-            conf.relation(:quizzes) do
-              schema(infer: true)
-              auto_struct true
-            end
-          end
-        end
 
         def instantiated_quiz_repo(rom)
           QuizRepo.new(rom)
@@ -56,6 +35,7 @@ module App
 
         def call(name_quiz:, **)
           # rom = connected_db
+          rom = Application['connected']
           binding.pry
           contract_quiz = load_quiz_from_db(rom, name_quiz)
           Run.new.call(contract_quiz.first.name, contract_quiz.first.id, rom)
